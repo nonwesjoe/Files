@@ -14,3 +14,6 @@ get=Get_data(batch_size=64,size=224)
 trainloader,valloader=get.get_fish()
 ///
 
+3.The network training
+run training.py to train your model.
+but you need to change some parameters first, like datapath= $YOUR PATH.
