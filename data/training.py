@@ -16,7 +16,7 @@ class Net(nn.Module):
 
         self.fc1 = nn.Linear(128,120)
         self.fc2 = nn.Linear(120,84)
-        self.fc3 = nn.Linear(84,8)
+        self.fc3 = nn.Linear(84,num_classes)
 
         self.relu = nn.ReLU()
         self.softmax = nn.Softmax(dim=1)
@@ -36,16 +36,16 @@ class Net(nn.Module):
     
 # Set parameters
 batch_size=64
-num_classes=8
+num_classes=17
 size=108
-datapath=r"C:/data"
-epochs=100
+datapath=r"./"
+epochs=30
 lr=0.005
 
 
 # Get data
 get= Get_data(batch_size=batch_size,size=size,datapath=datapath)
-trainload,valload= get.get_fish()
+trainload,valload= get.get_fruits()
 
 #Initialize model and optimizer and loss function
 model=Net(num_classes=num_classes)
@@ -72,13 +72,14 @@ for epoch in range(epochs):
         accuracy = (out.argmax(dim=1) == y.argmax(dim=1)).sum().item() / x.size(0)
         
         if i%10==0:
-            print(f'Training: , Step: {i}, Loss: {loss.item() : 5f}, Accuracy: {accuracy: 5f}')
+            print(f'Training: ,Step: {i}, Loss: {loss.item() : 5f}, Accuracy: {accuracy: 5f}')
 
 
     # Validation process
     model.eval()
     accuracies=0
     lossess=0
+    print(f'\nTesting time:  =================================================')
     with torch.no_grad():
         for i,(x,y) in enumerate(valload):
 
@@ -89,4 +90,7 @@ for epoch in range(epochs):
             accuracies+=accuracy
             lossess+=loss.item()
 
-        print(f'\nValidating: , Average Accuracy: {accuracies/len(valload): 5f}, Average Loss: {lossess/len(valload): 5f}')
+        print(f'Validating: Average Accuracy: {accuracies/len(valload): 5f}, Average Loss: {lossess/len(valload): 5f}\n')
+        print('===============================================================')
+
+print('Training finished')
